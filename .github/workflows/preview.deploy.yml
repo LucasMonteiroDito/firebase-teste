@@ -2,6 +2,7 @@ name: CD (preview)
 "on": pull_request
 jobs:
   preview:
+    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     name: "Deploy preview"
     runs-on: ubuntu-latest
     environment:
