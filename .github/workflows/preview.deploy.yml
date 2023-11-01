@@ -1,9 +1,8 @@
 name: CD (preview)
-on:
-  pull_request:
-    types: [review_requested, ready_for_review]
+"on": pull_request
 jobs:
   preview:
+    if: "${{ github.event.pull_request.head.repo.full_name == github.repository }}"
     name: "Deploy preview"
     runs-on: ubuntu-latest
     environment:
