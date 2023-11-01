@@ -1,0 +1,25 @@
+name: CD (preview)
+on:
+  pull_request:
+    types: [review_requested, ready_for_review]
+jobs:
+  preview:
+    name: "Deploy preview"
+    runs-on: ubuntu-latest
+    environment:
+      name: Preview
+      url: ${{ steps.firebase.outputs.details_url }}
+    outputs:
+      url: ${{ steps.firebase.outputs.details_url }}
+    steps:
+      - uses: actions/checkout@v3
+      - run: npm install && npm run build
+      - uses: FirebaseExtended/action-hosting-deploy@v0
+        id: firebase
+        env:
+          BRANCH: ${{ github.head_ref || github.ref_name }}
+        with:
+          repoToken: "${{ secrets.GITHUB_TOKEN }}"
+          firebaseServiceAccount: "${{ secrets.FIREBASE_SERVICE_ACCOUNT_FIR_WITH_REACT_A2E8D }}"
+          projectId: fir-with-react-a2e8d
+          channelId: "${{ env.BRANCH }}"
